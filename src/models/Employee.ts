@@ -29,6 +29,12 @@ export interface EmployeeDoc extends Document {
 
   capabilities: CapabilityGrantDoc[];
 
+  leaveBalance: {
+    earned: number;
+    casual: number;
+    sick: number;
+  }
+
   shiftStart: string; // "HH:MM", used by the attendance rule engine
   joinedAt: Date;
   status: EmploymentStatus;
@@ -63,6 +69,13 @@ const employeeSchema = new Schema<EmployeeDoc>(
     actingManagerUnit: {type: Date, default: null },
 
     capabilities: {type: [capabilityGrantSchema ], default: [] },
+
+    leaveBalance: {
+        earned: {type: Number, default: 6 },
+        casual: {type: Number, default: 6 },
+        sick: {type: Number, default: 6 },
+    },
+
     shiftStart: {type: String, default:"09:30"},
     joinedAt: {type: Date, required: true },
     status: {
@@ -70,10 +83,12 @@ const employeeSchema = new Schema<EmployeeDoc>(
         enum: ["active", "on_leave", "offboarding", "terminated"],
         default: "active",
     },
+
     lastWorkingDay: {type: Date, default: null },
+
     ctcAnnual: {type: Number, required: true },
-},
-{timestamps: true }
+    },
+  {timestamps: true }
 );
 
 employeeSchema.index({managerId: 1 });
@@ -83,6 +98,13 @@ employeeSchema.set("toJSON", {
     transform(_doc, ret) {
         const {passwordHash: _passwordHash, ...reset } = ret as unknown as Record<string, unknown >;
         return resizeTo;
+    },
+})
+// Never let a password hash leak into an API response by accident.
+employeeSchema.set("toJSON", {
+    transform: (_doc, ret) => {
+        const {passwordHash: _passwordHash, ...rest } = ret as unknown as Record<string, unknown>;
+        return rest;
     },
 })
 

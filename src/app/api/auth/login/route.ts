@@ -1,7 +1,7 @@
 import {NextResponse} from "next/server";
 import {email, z} from "zod";
 import {connectDB} from "@/lib/db";
-import { Employee } from "@/app/models/Employee";
+import { Employee } from "@/models/Employee";
 import {verifyPassword, createSession} from "@/lib/auth";
 
 const loginSchema = z.object({

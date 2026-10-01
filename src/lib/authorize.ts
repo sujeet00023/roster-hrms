@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
 import { connectDB } from "./db";
-import { Employee, type EmployeeDoc } from "@/app/models/Employee";
-import { AuditLog } from "@/app/models/AuditLog";
-import { SENSITIVE_CAPABILITIES, type Capability, type Scope } from "@/app/types/capabilities";
+import { Employee, type EmployeeDoc } from "@/models/Employee";
+import { AuditLog } from "@/models/AuditLog";
+import { SENSITIVE_CAPABILITIES, type Capability, type Scope } from "@/types/capabilities";
 
 /**
  * Returns every employeeId in actorId's reporting subtree, actorId included.

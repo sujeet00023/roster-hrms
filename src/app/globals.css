@@ -1,26 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  --paper: #F1F3F2;
+  --surface: #FFFFFF;
+  --surface-2: #E8EBEA;
+  --ink: #16202B;
+  --ink-2: #4B5A67;
+  --ink-3: #7C8B96;
+  --line: #D5DBD9;
+  --line-2: #C2CAC8;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --present: #0E7C7B;
+  --present-soft: #D6E9E8;
+  --watch: #A9761A;
+  --watch-soft: #F2E6CC;
+  --away: #AB4257;
+  --away-soft: #F3DCE1;
+  --leave: #4C5FA8;
+  --leave-soft: #DDE2F3;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #10171F;
+    --surface: #16202B;
+    --surface-2: #1E2A37;
+    --ink: #E6ECEA;
+    --ink-2: #A3B1BC;
+    --ink-3: #71818E;
+    --line: #2A3846;
+    --line-2: #3A4B5B;
+
+    --present: #4FBDB2;
+    --present-soft: #173C3D;
+    --watch: #D9A94A;
+    --watch-soft: #3B3117;
+    --away: #E1798E;
+    --away-soft: #3D1F27;
+    --leave: #8FA0E3;
+    --leave-soft: #232B4A;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+
+  --color-present: var(--present);
+  --color-present-soft: var(--present-soft);
+  --color-watch: var(--watch);
+  --color-watch-soft: var(--watch-soft);
+  --color-away: var(--away);
+  --color-away-soft: var(--away-soft);
+  --color-leave: var(--leave);
+  --color-leave-soft: var(--leave-soft);
+
+  --font-display: "Bricolage Grotesque", "IBM Plex Sans", sans-serif;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-font-smoothing: antialiased; }
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
 }

@@ -1,6 +1,6 @@
 import { connectDB } from "./db";
-import { Attendance, type AttendanceDoc } from "@/app/models/Attendance";
-import { Employee  } from "@/app/models/Employee";
+import { Attendance, type AttendanceDoc } from "@/models/Attendance";
+import { Employee  } from "@/models/Employee";
 import { start } from "node:repl";
 
 function minsOf(hhmm: string): number {
