@@ -118,4 +118,5 @@ export async function checkOut(employeeId: string): Promise<AttendanceRow> {
 
     return {date:existing.date, status: existing.status, checkIn: existing.checkIn, checkOut:existing.checkOut };
     
+    
 }
