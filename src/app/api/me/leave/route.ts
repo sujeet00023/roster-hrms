@@ -2,10 +2,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/auth";
 import { submitLeaveRequest } from "@/lib/leave";
-import { error } from "console";
 
 const bodySchema = z.object({
-    type: z.enum(["earned", "casula", "sick"]),
+    type: z.enum(["earned", "casual", "sick"]),
     from: z.coerce.date(),
     days: z.number().min(0.5).max(30),
     reason: z.string(). trim().min(3).max(300),
@@ -19,7 +18,6 @@ export async function POST(req: Request) {
     const parsed = bodySchema.safeParse(await req.json().catch(() => null));
     if(!parsed.success) {
         return NextResponse.json({ error: "Check the leave request details and try again"}, {status:400});
-        
     }
 
     try{

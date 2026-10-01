@@ -117,4 +117,5 @@ export async function checkOut(employeeId: string): Promise<AttendanceRow> {
     await existing.save();
 
     return {date:existing.date, status: existing.status, checkIn: existing.checkIn, checkOut:existing.checkOut };
+    
 }
