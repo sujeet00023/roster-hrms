@@ -16,7 +16,7 @@ function getSecret(): Uint8Array {
         return new TextEncoder().encode(secret);   
 }
 
-    export async function hashPassowrd(plain: string): Promise<string> {
+    export async function hashPassword(plain: string): Promise<string> {
         return bcrypt.hash(plain, 12);
         
     }
