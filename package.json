@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "seed": "node --env-file=.env.local --import tsx scripts/seed.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.7",
     "jose": "^6.2.12",
     "mongoose": "^9.10.1",
     "next": "^16.3.5",
@@ -24,6 +26,7 @@
     "@types/react-dom": "^19.2.7",
     "eslint": "^10.10.0",
     "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.2"
   }
 }
