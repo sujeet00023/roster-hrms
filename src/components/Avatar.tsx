@@ -40,5 +40,5 @@ export function Avatar({
     >
       {initials}
     </span>
-     );
+     ); 
 }
