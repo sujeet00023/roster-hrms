@@ -1,46 +1,98 @@
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Roster design tokens
+   Light is the default; dark follows the OS unless the user picked a theme
+   (the toggle sets data-theme on <html> and remembers it).
+   --------------------------------------------------------------------------- */
 :root {
-  --paper: #F1F3F2;
-  --surface: #FFFFFF;
-  --surface-2: #E8EBEA;
-  --ink: #16202B;
-  --ink-2: #4B5A67;
-  --ink-3: #7C8B96;
-  --line: #D5DBD9;
-  --line-2: #C2CAC8;
+  color-scheme: light;
 
-  --present: #0E7C7B;
-  --present-soft: #D6E9E8;
-  --watch: #A9761A;
-  --watch-soft: #F2E6CC;
-  --away: #AB4257;
-  --away-soft: #F3DCE1;
-  --leave: #4C5FA8;
-  --leave-soft: #DDE2F3;
+  --paper: #F4F5FB;
+  --surface: #FFFFFF;
+  --surface-2: #F0F2F9;
+  --ink: #0F1226;
+  --ink-2: #4B5170;
+  --ink-3: #7B82A3;
+  --line: #E5E8F3;
+  --line-2: #D5D9EA;
+
+  --brand: #5B5BF0;
+  --brand-2: #8B5CF6;
+  --brand-soft: #ECECFE;
+  --brand-ink: #4338CA;
+
+  --present: #0A7F5E;
+  --present-soft: #E1F5EE;
+  --watch: #A86206;
+  --watch-soft: #FDF0D8;
+  --away: #C42B4A;
+  --away-soft: #FDE6EB;
+  --leave: #2F5BC8;
+  --leave-soft: #E4ECFF;
+
+  --sh: 16 18 38;
+  --grad: linear-gradient(135deg, #5B5BF0 0%, #8B5CF6 100%);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #10171F;
-    --surface: #16202B;
-    --surface-2: #1E2A37;
-    --ink: #E6ECEA;
-    --ink-2: #A3B1BC;
-    --ink-3: #71818E;
-    --line: #2A3846;
-    --line-2: #3A4B5B;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
 
-    --present: #4FBDB2;
-    --present-soft: #173C3D;
-    --watch: #D9A94A;
-    --watch-soft: #3B3117;
-    --away: #E1798E;
-    --away-soft: #3D1F27;
-    --leave: #8FA0E3;
-    --leave-soft: #232B4A;
+    --paper: #0A0C18;
+    --surface: #13162B;
+    --surface-2: #1B1F3B;
+    --ink: #EEF0FF;
+    --ink-2: #A9AECF;
+    --ink-3: #7479A0;
+    --line: #252A4D;
+    --line-2: #323862;
+
+    --brand: #7C7CFF;
+    --brand-2: #A78BFA;
+    --brand-soft: #23265A;
+    --brand-ink: #B7B7FF;
+
+    --present: #3DDBA8;
+    --present-soft: #10382F;
+    --watch: #F5B84B;
+    --watch-soft: #3A2D12;
+    --away: #FF7B94;
+    --away-soft: #411B27;
+    --leave: #7FA6FF;
+    --leave-soft: #1B2A55;
+
+    --sh: 0 0 0;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #0A0C18;
+  --surface: #13162B;
+  --surface-2: #1B1F3B;
+  --ink: #EEF0FF;
+  --ink-2: #A9AECF;
+  --ink-3: #7479A0;
+  --line: #252A4D;
+  --line-2: #323862;
+
+  --brand: #7C7CFF;
+  --brand-2: #A78BFA;
+  --brand-soft: #23265A;
+  --brand-ink: #B7B7FF;
+
+  --present: #3DDBA8;
+  --present-soft: #10382F;
+  --watch: #F5B84B;
+  --watch-soft: #3A2D12;
+  --away: #FF7B94;
+  --away-soft: #411B27;
+  --leave: #7FA6FF;
+  --leave-soft: #1B2A55;
+
+  --sh: 0 0 0;
 }
 
 @theme inline {
@@ -53,6 +105,11 @@
   --color-line: var(--line);
   --color-line-2: var(--line-2);
 
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-ink: var(--brand-ink);
+
   --color-present: var(--present);
   --color-present-soft: var(--present-soft);
   --color-watch: var(--watch);
@@ -62,20 +119,160 @@
   --color-leave: var(--leave);
   --color-leave-soft: var(--leave-soft);
 
-  --font-display: "Bricolage Grotesque", "IBM Plex Sans", sans-serif;
-  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --shadow-card: 0 1px 2px rgb(var(--sh) / 0.05), 0 12px 32px -16px rgb(var(--sh) / 0.14);
+  --shadow-pop: 0 2px 4px rgb(var(--sh) / 0.06), 0 24px 48px -16px rgb(var(--sh) / 0.28);
 }
 
-*, *::before, *::after { box-sizing: border-box; }
+@theme {
+  --animate-fade-up: fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pop: pop 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
 
-html { -webkit-font-smoothing: antialiased; }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* --------------------------------- base ---------------------------------- */
+html {
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
 
 body {
-  background: var(--paper);
   color: var(--ink);
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Soft brand glow behind everything. Fixed + non-interactive so it never costs scroll performance. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 420px at 85% -8%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 70%),
+    radial-gradient(700px 380px at -5% 8%, color-mix(in srgb, var(--brand-2) 10%, transparent), transparent 70%);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand) 28%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* ------------------------------ components ------------------------------- */
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-surface shadow-card;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition duration-150 select-none active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60;
+  }
+  .btn-primary {
+    background-image: var(--grad);
+    color: #fff;
+    box-shadow: 0 8px 18px -8px rgb(91 91 240 / 0.6);
+  }
+  .btn-primary:hover {
+    filter: brightness(1.06);
+  }
+  .btn-secondary {
+    @apply border border-line-2 bg-surface text-ink hover:bg-surface-2;
+  }
+  .btn-ghost {
+    @apply text-ink-2 hover:bg-surface-2 hover:text-ink;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-line-2 bg-surface px-3.5 py-2.5 text-sm text-ink outline-none transition placeholder:text-ink-3 focus:border-brand focus:ring-4 focus:ring-brand/15;
+  }
+
+  .icon-btn {
+    @apply grid h-10 w-10 place-items-center rounded-xl text-ink-2 transition hover:bg-surface-2 hover:text-ink;
+  }
+}
+
+/* ------------------------------ theme icons ------------------------------ */
+/* Both icons are rendered; CSS shows the right one, so there's no hydration flash or JS state. */
+.i-dark { display: none; }
+.i-light { display: inline-block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .i-dark { display: inline-block; }
+  :root:not([data-theme="light"]) .i-light { display: none; }
+}
+:root[data-theme="dark"] .i-dark { display: inline-block; }
+:root[data-theme="dark"] .i-light { display: none; }
+
+/* ------------------------------ loading UI ------------------------------- */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-2) 25%,
+    color-mix(in srgb, var(--surface-2) 45%, var(--surface)) 50%,
+    var(--surface-2) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 0.75rem;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ---------------------------------- motion ---------------------------------- */
+.ring-draw {
+  animation: ring-draw 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes ring-draw {
+  from { stroke-dashoffset: var(--ring-full); }
+}
+
+.pulse-soft {
+  animation: pulse-soft 2.4s ease-out infinite;
+}
+@keyframes pulse-soft {
+  0% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0.5); }
+  70% { box-shadow: 0 0 0 14px rgb(255 255 255 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

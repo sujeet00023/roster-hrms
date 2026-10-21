@@ -133,4 +133,47 @@ export async function assertCan(
     }
 }
 
+export interface ScopeResolution {
 
+    scope: Scope | null
+    /**
+   * Employee ids the capability reaches, or "all" when the scope is org/system.
+   * The actor's own id is never included for team scope - "my team" means the
+   * people under me, not me.
+   */
+   ids: Types.ObjectId[] | "all";
+   
+}
+
+   const SCOPE_RANK: Record<Scope, number> = {self: 0, team: 1, org: 2, system:3 };
+/**
+ * Answers "who can this person apply this capability to?" in one place, so
+ * list pages (team overview, approval queue) don't each re-implement the
+ * scope walk. Single-record checks should still go through can().
+ */
+export async function resolveScope(
+ actorId: string,
+ capability: Capability  
+
+): Promise<ScopeResolution> {
+    await connectDB();
+
+    const actor = await Employee.findById(actorId). lean<EmployeeDoc>();
+    if(!actor || actor.status === "terminated") return {scope: null, ids: [] };
+
+    const grants = actor.capabilities.filter((g) => g.key === capability);
+    if(grants.length === 0) 
+        return {scope: null, ids: [] };
+
+    const widest = grants.reduce<Scope>(
+        (best, g) => (SCOPE_RANK[g.scope] > SCOPE_RANK[best] ? g.scope : best),
+        grants[0].scope
+    );
+
+    if(widest === "org" || widest === "system")
+        return {scope: "self", ids:[new Types.ObjectId(actorId)]}
+
+    const subtree = await getTeamSubTreeId(actorId);
+    return {scope: "team", ids: subtree.filter((id) => id.toString() !== actorId) };
+    
+}
