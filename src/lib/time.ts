@@ -42,3 +42,28 @@ export function localHHMM(d: Date = new Date()): string {
     return `${String(p.hour). padStart(2, "0")}: ${String(p.minute).padStart(2, "0")}`;
 
 }
+
+/**
+ * Does a leave request cover the calendar day `ms` (00:00 UTC of that date)?
+ *
+ * Leave is counted in *working* days: a 2-day request starting on a Friday
+ * covers Friday and the following Monday, not Friday and Saturday. Weekends
+ * inside the range are skipped, and a request that starts on a weekend begins
+ * on the next weekday. A half-day request still covers its whole day.
+ *
+ * Shared by the attendance calendar, the team view and payroll so they can
+ * never disagree about whether someone was on leave.
+ */
+export function leaveCoversDay(fromMs: number, days: number, ms: number): boolean {
+  const DAY = 86400000;
+  if(ms < fromMs ) return false;
+
+  let remaining = Math.max(1, Math.ceil(days));
+  for (let cur = fromMs; remaining > 0 && cur <= ms; cur += DAY) {
+    const dow = new Date(cur).getUTCDay();
+    if(dow === 0 || dow === 6) continue;
+    if(cur === ms) return true;
+    remaining -= 1;
+  }
+  return false;
+}
