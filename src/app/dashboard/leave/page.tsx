@@ -1,63 +1,61 @@
 import { getSession } from "@/lib/auth";
 import { getLeaveSummary } from "@/lib/leave";
+import { LeaveRow } from "@/components/LeaveRow";
+import { PageHeader } from "@/components/PageHeader";
 import { Panel } from "@/components/Panel";
-import { StatusPill } from "@/components/StatusPil";
 import { LeaveRequestForm } from "@/components/LeaveRequestForm";
+import { ProgressRing } from "@/components/ProgressRing";
+
+// Rings fill against a 12-day yardstick. It's a visual scale, not a policy limit.
+const RING_SCALE = 12;
 
 export default async function LeavePage() {
     const session = await getSession();
     const leave = await getLeaveSummary(session!.employeeId);
 
+    const balances = [
+      {label: "Earned", value: leave.balance.earned, tone: "leave" },
+      {label: "Casual", value: leave.balance.casual, tone: "brand" },
+      {label: "Sick", value: leave.balance.sick, tone: "away" },
+    ] as const;
     return (
-         <div className="flex flex-col gap-5">
-      <div>
-        <h1 className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">Leave</h1>
-        <p className="mt-1 text-sm text-ink-2">
-          Requests of 2 days or fewer clear automatically when your balance and team coverage allow it.
-        </p>
-      </div>
+      <div className="flex flex-col gap-5 sm:gap-6">
+      <PageHeader
+        title="Leave"
+        subtitle="Requests of 2 days or fewer clear automatically when your balance and your team's coverage allow it. Anything longer goes to your manager."
+      />
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Panel className="p-4">
-          <p className="text-xs text-ink-2">Earned</p>
-          <p className="mt-1 font-display text-xl font-bold">{leave.balance.earned}</p>
-        </Panel>
-        <Panel className="p-4">
-          <p className="text-xs text-ink-2">Casual</p>
-          <p className="mt-1 font-display text-xl font-bold">{leave.balance.casual}</p>
-        </Panel>
-        <Panel className="p-4">
-          <p className="text-xs text-ink-2">Sick</p>
-          <p className="mt-1 font-display text-xl font-bold">{leave.balance.sick}</p>
-        </Panel>
-      </div>
-
-      <Panel title="Request leave">
-        <LeaveRequestForm />
-      </Panel>
-
-      <Panel title="History">
-        {leave.requests.length === 0 ? (
-          <p className="p-5 text-sm text-ink-2">Nothing requested yet.</p>
-        ) : (
-          <div className="flex flex-col">
-            {leave.requests.map((r) => (
-              <div key={r.id} className="flex items-start justify-between gap-3 border-b border-line px-4 py-3 last:border-b-0 sm:px-5">
-                <div className="min-w-0">
-                  <p className="text-sm font-medium capitalize">
-                    {r.type} · {r.days} day{r.days > 1 ? "s" : ""}
-                  </p>
-                  <p className="mt-0.5 text-xs text-ink-2">
-                    From {new Date(r.from).toLocaleDateString("en-IN", { day: "numeric", month: "short" })} — {r.reason}
-                  </p>
-                  {r.decisionNote && <p className="mt-0.5 text-xs text-ink-3">{r.decisionNote}</p>}
-                </div>
-                <StatusPill status={r.status} />
-              </div>
-            ))}
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+        {balances.map((b) => (
+          <div key={b.label} className="card flex flex-col items-center gap-3 p-4 sm:p-6">
+            <ProgressRing value={b.value} max={RING_SCALE} tone={b.tone} size={96} stroke={10}>
+              <span className="font-display text-3xl font-extrabold">{b.value}</span>
+            </ProgressRing>
+            <div className="text-center">
+              <p className="text-sm font-semibold">{b.label}</p>
+              <p className="text-xs text-ink-3">days left</p>
+            </div>
           </div>
-        )}
-      </Panel>
+        ))}
+      </div>
+
+      <div className="grid gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <Panel title="Request leave" note="You'll see the decision straight away if it's auto-approved">
+          <LeaveRequestForm />
+        </Panel>
+
+        <Panel title="History">
+          {leave.requests.length === 0 ? (
+            <p className="px-5 pb-6 pt-3 text-sm text-ink-2 sm:px-6">Nothing requested yet. Your requests and their outcomes will appear here.</p>
+          ) : (
+            <div className="mt-2 divide-y divide-line">
+              {leave.requests.map((r) => (
+                <LeaveRow key={r.id} r={r} detailed />
+              ))}
+            </div>
+          )}
+        </Panel>
+      </div>
     </div>
     )
 }
