@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { Component, ComponentType } from "react";
+import type { ComponentType } from "react";
 import { Avatar } from "./Avatar";
 import { LogoutButton } from "./LogoutButton";
 import { ThemeToggle } from "./ThemeToggle";
 import { Logo } from "./Logo";
-import {IconCalendar ,IconCheck, IconClock,IconHome,IconTeam, IconUser,IconWallet } from "./Icons";
+import {IconBuilding, IconCalendar ,IconCheck, IconClock,IconHome,IconShield,IconTeam, IconUser,IconWallet } from "./Icons";
 
 export interface NavItem {
     href: string;
@@ -32,6 +32,8 @@ export function AppShell({
     title,
     showTeam = false,
     showApprovals = false,
+    showDirectory = false,
+    showAudit = false,
     pendingApprovals = 0,
     children,
 }:{
@@ -39,6 +41,8 @@ export function AppShell({
     title: string;
     showTeam?: boolean;
     showApprovals?: boolean;
+    showDirectory?: boolean;
+    showAudit?: boolean;
     pendingApprovals?: number;
     children: React.ReactNode;
 
@@ -59,9 +63,14 @@ export function AppShell({
      icon: IconCheck,
      badge: pendingApprovals,
       });
-      const allNav = [...SELF_NAV, ...manageNav];
+      
+      if(showAudit) manageNav.push({href: "/dashboard/audit", label: "Audit log", icon: IconShield });
+      const mainNav = [...SELF_NAV];
+
+      if(showDirectory) mainNav.splice(mainNav.length - 1, 0, {href: "/dashboard/people", label: "Directory", icon:IconBuilding });
+      const allNav = [...mainNav, ...manageNav];
     return (
-       <div className="min-h-dvh lg:grid lg:grid-cols-[272px_minmax(0,1fr)]">
+      <div className="min-h-dvh lg:grid lg:grid-cols-[272px_minmax(0,1fr)]">
       {/* ---------------------------- Desktop sidebar ---------------------------- */}
       <aside className="hidden overflow-y-auto border-r border-line bg-surface/70 px-4 py-5 backdrop-blur-xl lg:sticky lg:top-0 lg:flex lg:h-dvh lg:flex-col">
         <Link href="/dashboard" className="flex items-center gap-2.5 px-2 pb-7 pt-1">
@@ -70,7 +79,7 @@ export function AppShell({
         </Link>
 
         <nav aria-label="Main" className="flex flex-col gap-1">
-          {SELF_NAV.map((item) => (
+          {mainNav.map((item) => (
             <SideLink key={item.href} item={item} active={isActive(item.href)} />
           ))}
         </nav>
@@ -121,7 +130,7 @@ export function AppShell({
       {/* ------------------------ Mobile / tablet floating nav ------------------------ */}
       <nav
         aria-label="Main"
-        className="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-30 mx-auto flex max-w-xl items-center justify-between gap-1 rounded-2xl border border-line bg-surface/90 p-1.5 shadow-pop backdrop-blur-xl lg:hidden"
+        className="no-scrollbar fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-30 mx-auto flex max-w-xl items-center justify-between gap-1 overflow-x-auto rounded-2xl border border-line bg-surface/90 p-1.5 shadow-pop backdrop-blur-xl lg:hidden"
       >
         {allNav.map((item) => (
           <TabLink key={item.href} item={item} active={isActive(item.href)} />

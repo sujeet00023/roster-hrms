@@ -223,6 +223,9 @@ body::before {
   }
 }
 
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 /* ------------------------------ theme icons ------------------------------ */
 /* Both icons are rendered; CSS shows the right one, so there's no hydration flash or JS state. */
 .i-dark { display: none; }

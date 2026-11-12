@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/auth";
-import { getCurrnentPayslip, formatINR } from "@/lib/payroll";
+import { getCurrentPayslip, formatINR } from "@/lib/payroll";
 import { PageHeader } from "@/components/PageHeader";
 import { Panel } from "@/components/Panel";
 import { IconInfo } from "@/components/Icons";
@@ -13,10 +13,9 @@ function Line ({label, value, muted = false, negative = false}: {label: string; 
     );
 }
 
-
 export default async function PayslipPage() {
     const session = await getSession();
-    const slip = await getCurrnentPayslip(session!.employeeId);
+    const slip = await getCurrentPayslip(session!.employeeId);
 
     const tax = slip.tds + slip.professionalTax;
     const pct = (n: number) => (slip.gross > 0 ? Math.max(0, (n / slip.gross ) * 100): 0);
@@ -26,7 +25,7 @@ export default async function PayslipPage() {
       {label: "Tax", value: tax , color: "var(--watch)" },
       {label: "Loss of pay", value: slip.lopDeduction, color: "var(--away)" },
     ].filter((s) => s.value > 0 );
-
+  
     return (
      <div className="flex flex-col gap-5 sm:gap-6">
       <PageHeader title="Payslip" subtitle={`${slip.month}, worked out from this month's attendance.`} />
