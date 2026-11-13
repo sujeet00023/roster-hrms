@@ -14,6 +14,8 @@ export interface EmployeeDoc extends Document {
     name: string;
     email: string;
     passwordHash: string;
+  /** True for accounts created with a temporary password; the user must choose their own before using the app. */
+    mustChangePassword: boolean;
     title: string;
     department: string;
 
@@ -39,6 +41,7 @@ export interface EmployeeDoc extends Document {
   joinedAt: Date;
   status: EmploymentStatus;
   lastWorkingDay: Date | null; // set once offboarding starts
+
   ctcAnnual: number //stored only where payroll capability reaches - see README
 
   createdAt: Date;
@@ -58,9 +61,10 @@ const capabilityGrantSchema = new Schema<CapabilityGrantDoc>(
 
 const employeeSchema = new Schema<EmployeeDoc>(
 {
-    name: {type: String, reuired: true, trim: true },
+    name: {type: String, required: true, trim: true },
     email: {type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: {type: String, required: true },
+    mustChangePassword: {type: Boolean, default: false},
     department: {type: String, required: true },
 
     managerId: {type: Schema.Types.ObjectId, ref: "Employee", default: null },
@@ -94,21 +98,15 @@ const employeeSchema = new Schema<EmployeeDoc>(
 employeeSchema.index({managerId: 1 });
 employeeSchema.index({department: 1 });
 
-employeeSchema.set("toJSON", {
-    transform(_doc, ret) {
-        const {passwordHash: _passwordHash, ...reset } = ret as unknown as Record<string, unknown >;
-        return resizeTo;
-    },
-})
 // Never let a password hash leak into an API response by accident.
 employeeSchema.set("toJSON", {
-    transform: (_doc, ret) => {
-        const {passwordHash: _passwordHash, ...rest } = ret as unknown as Record<string, unknown>;
+    transform(_doc, ret) {
+        const {passwordHash: _passwordHash, ...rest } = ret as unknown as Record<string, unknown >;
         return rest;
     },
 })
 
+
 export const Employee = models.Employee || model<EmployeeDoc>("Employee", employeeSchema);
-  
 
 

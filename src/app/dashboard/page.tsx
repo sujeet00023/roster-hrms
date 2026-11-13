@@ -4,6 +4,7 @@ import { getTodayAttendance, getAverageWeeklyHours } from "@/lib/attendance";
 import { getLeaveSummary } from "@/lib/leave";
 import { APP_TIMEZONE, localParts } from "@/lib/time";
 import { Employee } from "@/models/Employee";
+import { CheckInOut } from "@/components/CheckInOut";
 import { Clock } from "@/components/Clock";
 import { IconArrowRight, IconCalendar, IconClock, IconSparkle } from "@/components/Icons";
 import { LeaveRow } from "@/components/LeaveRow";
@@ -11,7 +12,6 @@ import { Panel } from "@/components/Panel";
 import { ProgressRing } from "@/components/ProgressRing";
 import { Stat } from "@/components/stat";
 import { StatusPill } from "@/components/StatusPil";
-import { CheckInOut } from "@/components/CheckInOut";
 import Link from "next/link";
 
 // Rings fill against a 12-day yardstick. It's a visual scale, not a policy limit.

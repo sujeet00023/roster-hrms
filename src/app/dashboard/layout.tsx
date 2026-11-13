@@ -13,17 +13,22 @@ export default async function dashboardLayout({ children}: {children: React.Reac
     await connectDB();
     const employee = await Employee.findById(session.employeeId).lean<EmployeeDoc>();
     if(!employee || employee.status === "terminated") redirect("/login");
+
+    if(employee.mustChangePassword) redirect("/change-password");
   // Nav visibility only. Holding any grant of a capability means can(actor, cap) with no
   // target is true, so reading the grants we already loaded saves two database round trips.
   // The pages themselves re-check on the server; hiding a link is not access control.
   const holds = (key: string) => employee.capabilities.some((g) => g.key === key);
   const showTeam = holds("team.view");
   const showApprovals = holds("leave.approve");
+  const showDirectory = holds("directory.view");
+  const showAudit = holds("audit.view");
   const pendingApprovals = showApprovals ? await countPendingApprovals(session.employeeId): 0;
     return (
-        <AppShell name={employee.name} title={employee.title} showTeam = {showTeam} showApprovals = {showApprovals} pendingApprovals = {pendingApprovals}>
+        <AppShell name={employee.name} title={employee.title} showTeam = {showTeam} showApprovals = {showApprovals} pendingApprovals = {pendingApprovals} 
+         showDirectory = {showDirectory} showAudit = {showAudit}>
             {children}
         </AppShell>
     );
     
-}
+} 
