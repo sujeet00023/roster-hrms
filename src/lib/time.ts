@@ -8,7 +8,7 @@
  *
  * Override with APP_TIMEZONE in .env.local (any IANA name, e.g. "Europe/London").
  */
-export const APP_TIMEZONE = process.env.APP_TIMEZONE || "Asia/kolkata";
+export const APP_TIMEZONE = process.env.APP_TIMEZONE || "Asia/Kolkata";
 
 export function localParts(d: Date = new Date(), tz: string = APP_TIMEZONE){
       const parts = new Intl.DateTimeFormat("en-CA", {

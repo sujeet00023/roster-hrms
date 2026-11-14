@@ -7,7 +7,7 @@ const bodySchema = z.object({
     type: z.enum(["earned", "casual", "sick"]),
     from: z.coerce.date(),
     days: z.number().min(0.5).max(30),
-    reason: z.string(). trim().min(3).max(300),
+    reason: z.string().trim().min(3).max(300),
 });
 
 export async function POST(req: Request) {

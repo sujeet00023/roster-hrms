@@ -101,6 +101,7 @@ export async function submitLeaveRequest(
         type: input.type,
         from: input.from,
         days: input.days,
+        reason: input.reason,
         status: decision.approved ? "approved" : "pending",
         decidedAt: decision.approved ? new Date() : null,
         decisionNote: decision.note,

@@ -1,4 +1,3 @@
-import { boolean } from "zod";
 import { IconPlane } from "./Icons";
 import { StatusPill } from "./StatusPil";
 import { TONES, type Tone } from "./tones";
