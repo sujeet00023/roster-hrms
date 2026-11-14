@@ -34,14 +34,14 @@ export async function listAudit(actorId: string, limit = 100): Promise<AuditEntr
     if(scope.scope !== "org" && scope.scope !== "system") return null;
 
     const filter = scope.scope === "system" ? {action: { $regex: SYSTEM_ACTIONS}} : {};
-    const rows = (await AuditLog.find(filter)).toSorted({ createdAt: -1 }).limit(limit).lean<AuditLogDoc[]>();
+    const rows = await AuditLog.find(filter).sort({ createdAt: -1 }).limit(limit).lean<AuditLogDoc[]>();
     if(rows.length === 0) return [];
 
     const ids = [
         ...new Set(rows.flatMap((r) => [r.actorId.toString(), r.targetEmployeeId?.toString()]).filter(Boolean)),
 
     ] as string[];
-    const people = await Employee.find({ _id: {$in: ids }}). select ("name").lean<Pick<EmployeeDoc, "id" | "name">[]>();
+    const people = await Employee.find({ _id: {$in: ids }}). select ("name").lean<Pick<EmployeeDoc, "_id" | "name">[]>();
     const name = new Map(people.map((p) => [p._id.toString(), p.name]));
 
     return rows.map((r) => ({
