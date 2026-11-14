@@ -17,7 +17,7 @@ export function ChangePasswordForm({ forced}: {forced: boolean }) {
 
     async function handleSubmit(e:FormEvent) {
         e.preventDefault();
-        if(next ! == confirm ) {
+        if(next !== confirm ) {
             setError("The two new passwords don't match. ");
             return;
 

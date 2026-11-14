@@ -57,7 +57,7 @@ export async function listDirectory(
 
         const managerIds = [...new Set(people.map((p) => p.managerId?.toString()).filter(Boolean))] as string[];
         const managers = managerIds.length
-        ? await Employee.find({ _id: {$in: managerIds }}).select("name").lean<Pick<EmployeeDoc, "id" | "name" 
+        ? await Employee.find({ _id: {$in: managerIds }}).select("name").lean<Pick<EmployeeDoc, "_id" | "name" 
         >[]>()
         : [];
         const managerName = new Map(managers.map((m) => [m._id.toString(), m.name]));
