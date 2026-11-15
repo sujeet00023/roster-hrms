@@ -15,7 +15,7 @@ export function ApprovalActions({ requestId }: {requestId: string }) {
 
         const res = await fetch(`/api/team/leave/${requestId}`, {
             method: "POST",
-            headers: {"content- Type" : "application/json"},
+            headers: {"content-Type" : "application/json"},
             body: JSON.stringify({ decision, note: note || undefined }),
         });
         
