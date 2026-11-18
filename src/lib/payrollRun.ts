@@ -156,6 +156,7 @@ async function compute(month: string): Promise<RunPreview> {
             unpaidDays: rows.reduce((a, r) => a+ r.unpaidDays, 0),
         },
     };
+}
 
     export async function previewRun(actorId: string, month: string): Promise<RunPreview> {
         await connectDB();
@@ -170,7 +171,7 @@ async function compute(month: string): Promise<RunPreview> {
         return preview;
 
     }
-}
+
     /**
  * Publishes the run. The figures are recomputed here on the server - never taken from the
  * browser - and the unique month on PayrollRun is what makes a double publish impossible.
