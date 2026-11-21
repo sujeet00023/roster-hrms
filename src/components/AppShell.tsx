@@ -34,6 +34,8 @@ export function AppShell({
     showApprovals = false,
     showDirectory = false,
     showAudit = false,
+    showPayroll = false,
+    showHolidays = false,
     pendingApprovals = 0,
     children,
 }:{
@@ -43,6 +45,8 @@ export function AppShell({
     showApprovals?: boolean;
     showDirectory?: boolean;
     showAudit?: boolean;
+    showPayroll?: boolean;
+    showHolidays?: boolean;
     pendingApprovals?: number;
     children: React.ReactNode;
 
@@ -66,7 +70,8 @@ export function AppShell({
       
       if(showAudit) manageNav.push({href: "/dashboard/audit", label: "Audit log", icon: IconShield });
       const mainNav = [...SELF_NAV];
-
+      if(showHolidays) manageNav.push({href: "/dashboard/holidays", label: "Holidays", icon: IconCalendar });
+      if(showPayroll) manageNav.push({ href: "/dashboard/payroll", label: "Payroll", icon: IconWallet})
       if(showDirectory) mainNav.splice(mainNav.length - 1, 0, {href: "/dashboard/people", label: "Directory", icon:IconBuilding });
       const allNav = [...mainNav, ...manageNav];
     return (
@@ -182,3 +187,4 @@ function TabLink({ item, active }: { item: NavItem; active: boolean }) {
     </Link>
   );
 }
+

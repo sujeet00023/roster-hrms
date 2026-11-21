@@ -23,10 +23,14 @@ export default async function dashboardLayout({ children}: {children: React.Reac
   const showApprovals = holds("leave.approve");
   const showDirectory = holds("directory.view");
   const showAudit = holds("audit.view");
+  const showPayroll = holds("payroll.run");
+  const showHolidays = holds("policy.edit");
   const pendingApprovals = showApprovals ? await countPendingApprovals(session.employeeId): 0;
     return (
         <AppShell name={employee.name} title={employee.title} showTeam = {showTeam} showApprovals = {showApprovals} pendingApprovals = {pendingApprovals} 
-         showDirectory = {showDirectory} showAudit = {showAudit}>
+         showDirectory = {showDirectory} showAudit = {showAudit} 
+         showPayroll = {showPayroll} showHolidays = {showHolidays}
+         >
             {children}
         </AppShell>
     );
