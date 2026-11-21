@@ -28,6 +28,7 @@ export function HolidayManager({ holidays }: {holidays: HolidayItem[] }) {
         const res = await fetch("/api/holidays", {
             method: "POST",
             headers: {"Content-Type": "application/json" }, 
+            body: JSON.stringify({ date, name }),
         });
         const data = await res.json().catch(() => ({}));
         setPending(false);

@@ -255,16 +255,22 @@ body::before {
 }
 
 /* ---------------------------------- motion ---------------------------------- */
+
 .ring-draw {
   animation: ring-draw 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+
 @keyframes ring-draw {
   from { stroke-dashoffset: var(--ring-full); }
 }
 
+
 .pulse-soft {
   animation: pulse-soft 2.4s ease-out infinite;
 }
+
+
 @keyframes pulse-soft {
   0% { box-shadow: 0 0 0 0 rgb(255 255 255 / 0.5); }
   70% { box-shadow: 0 0 0 14px rgb(255 255 255 / 0); }
