@@ -139,7 +139,7 @@ async function compute(month: string): Promise<RunPreview> {
             
         });
         return {
-            employeeId: key, name: p.name, title:p.title, department: p.department, ...pay
+            employeeId: key, name: p.name, title:String(p.title ?? "").trim() || "Not specified", department: p.department, ...pay
         };
     });
 
@@ -187,7 +187,8 @@ export async function publishRun(actorId: string, month: string): Promise<{month
     try {
         run = await PayrollRun.create({
             month,
-            employeeCount: preview.totals.gross,
+            employeeCount: preview.totals.employees,
+            totalGross: preview.totals.gross,
             totalNet: preview.totals.net,
             totalUnpaidDays: preview.totals.unpaidDays,
             createdBy: new Types.ObjectId(actorId),
@@ -212,7 +213,7 @@ export async function publishRun(actorId: string, month: string): Promise<{month
                 preJoinDays: r.preJoinDays,
                 unpaidDays: r.unpaidDays,
                 gross: r.gross,
-                lopDeduction:r.lopDeduction,
+                 lopDeduction: r.lopDeduction,
                 joiningDeduction: r.joiningDeduction,
                 earnedGross: r.earnedGross,
                 basic: r.basic,

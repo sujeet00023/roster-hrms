@@ -7,13 +7,25 @@ import { listRuns, recentCompletedMonths } from "@/lib/payrollRun";
 import { IconArrowRight, IconInfo } from "@/components/Icons";
 import { PageHeader } from "@/components/PageHeader";
 import { Panel } from "@/components/Panel";
+import { can } from "@/lib/authorize";
 
 export const metadata = {title: "Payroll" };
 
+
 export default async function PayrollPage() {
     const session = await getSession();
+  /*   const allowed = await can(
+  session!.employeeId,
+  "payroll.run",
+  undefined,
+  { silent: true }
+);
+
+console.log("PAYROLL ACCESS:", allowed); */
     const runs = await listRuns(session!.employeeId);
     if(!runs) notFound();
+   /*  console.log("PAYROLL RUNS RESULT:", runs);
+console.log("IS ARRAY:", Array.isArray(runs)); */
 
     const done = new Set(runs.map((r) => r.month ));
     const ready = recentCompletedMonths().filter((m) => !done.has(m));

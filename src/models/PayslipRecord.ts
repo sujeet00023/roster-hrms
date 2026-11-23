@@ -17,7 +17,7 @@ export interface PayslipRecordDoc extends Document {
     preJoinDays: number;
     unpaidDays: number;
     gross: number;
-    lopDeducation: number;
+    lopDeduction: number;
     joiningDeduction: number;
     earnedGross: number;
     basic: number;
@@ -42,7 +42,7 @@ const payslipRecordSchema = new Schema<PayslipRecordDoc>(
         preJoinDays: num,
         unpaidDays: num,
         gross: num,
-        lopDeducation: num,
+        lopDeduction: num,
         joiningDeduction: num,
         earnedGross: num,
         basic: num,

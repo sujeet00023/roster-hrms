@@ -1,5 +1,6 @@
 import { connectDB } from "./db";
 import { resolveScope } from "./authorize";
+import { canEditPeople } from "./employees";
 import { Employee, type EmployeeDoc, type EmploymentStatus } from "@/models/Employee";
 
 export interface DirectoryRow {
@@ -19,6 +20,8 @@ export interface Directory {
     departments: string[];
   /** True when the viewer holds org-wide people access and may see employment status. */
     seesStatus: boolean;
+    /** True when the viewer may edit other people's records (org-wide access). */
+    canEdit: boolean;
 }
 
 export function escapeRegExp(s: string): string {
@@ -48,11 +51,12 @@ export async function listDirectory(
     }
         if(filters.dept) query.department = filters.dept;
 
-        const [people, total, departments, profileScope] = await Promise.all([
+        const [people, total, departments, profileScope, canEdit] = await Promise.all([
             Employee.find(query).sort({name: 1 }).limit(LIMIT).lean<EmployeeDoc[]>(),
             Employee.countDocuments(query),
             Employee.distinct("department", base) as Promise<string[]>,
             resolveScope(actorId, "profile.view"),
+            canEditPeople(actorId),
         ]);
 
         const managerIds = [...new Set(people.map((p) => p.managerId?.toString()).filter(Boolean))] as string[];
@@ -77,6 +81,7 @@ export async function listDirectory(
             total,
             departments: departments.sort((a, b) => a.localeCompare(b)),
             seesStatus: profileScope.scope === "org",
+            canEdit,
 
     };
 }

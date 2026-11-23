@@ -3,8 +3,7 @@ import { connectDB } from "./db";
 import { resolveScope } from "./authorize";
 import { Employee, type EmployeeDoc } from "@/models/Employee";
 import { AuditLog } from "@/models/AuditLog";
-import { patchFetch } from "next/dist/server/app-render/entry-base";
-import { HmrTarget } from "next/dist/build/swc";
+
 
 export class EmployeeError extends Error {
     constructor (
