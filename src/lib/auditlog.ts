@@ -22,6 +22,10 @@ const VERBS: Record<string, string> = {
     "leave.approved": "approved leave",
     "leave.rejected": "declined leave",
     "employee.onboard": "added an employee",
+    "employee.update": "updated an employee record",
+    "holiday.add": "added a company holiday",
+    "payroll.preview": "previewed payroll",
+    "payroll.publish": "published payroll",
     "setup.first_admin": "completed first-time setup",
 };
 

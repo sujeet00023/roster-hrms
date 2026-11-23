@@ -30,7 +30,7 @@ export default async function DirectoryPage({
     const filtered = Boolean(q || dept);
 
     return (
-        <div className="flex flex-col gap-5 sm:gap-6">
+     <div className="flex flex-col gap-5 sm:gap-6">
       <PageHeader
         title="Directory"
         subtitle={`${directory.total} ${directory.total === 1 ? "person" : "people"}${filtered ? " match your filters" : " across the company"}.`}
@@ -84,10 +84,17 @@ export default async function DirectoryPage({
                   {p.managerName && <span>Reports to {p.managerName}</span>}
                   {directory.seesStatus && <span>Joined {formatDay(p.joinedAt, { month: "short", year: "numeric" })}</span>}
                 </p>
-                <a href={`mailto:${p.email}`} className="mt-2 inline-flex max-w-full items-center gap-1.5 text-xs font-medium text-ink-2 hover:text-brand-ink">
-                  <IconMail className="h-3.5 w-3.5 flex-none" />
-                  <span className="truncate">{p.email}</span>
-                </a>
+                <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+                  <a href={`mailto:${p.email}`} className="inline-flex min-w-0 items-center gap-1.5 text-xs font-medium text-ink-2 hover:text-brand-ink">
+                    <IconMail className="h-3.5 w-3.5 flex-none" />
+                    <span className="truncate">{p.email}</span>
+                  </a>
+                  {directory.canEdit && (
+                    <Link href={`/dashboard/people/${p.id}`} className="text-xs font-semibold text-brand-ink hover:underline">
+                      Edit
+                    </Link>
+                  )}
+                </div>
               </div>
             </article>
           ))}

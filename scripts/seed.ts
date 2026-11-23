@@ -12,6 +12,9 @@ import { Employee } from "../src/models/Employee";
 import { AuditLog } from "../src/models/AuditLog";
 import { Attendance } from "../src/models/Attendance";
 import { LeaveRequest } from "../src/models/LeaveRequest";
+import { Holiday } from "@/models/Holiday";
+import { PayrollRun } from "@/models/PayrollRun";
+import { PayslipRecord } from "@/models/PayslipRecord";
 import { SystemFlag } from "../src/models/SystemFlag";
 import { hashPassword } from "../src/lib/auth";
 import { gradePunch } from "../src/lib/attendance";
@@ -57,7 +60,10 @@ async function main() {
   await Attendance.deleteMany({});
   await LeaveRequest.deleteMany({});
   await SystemFlag.deleteMany({});
-
+  await Holiday.deleteMany({});
+  await PayrollRun.deleteMany({});
+  await PayslipRecord.deleteMany({});
+  
   const pw = await hashPassword("password123");
   const on = (date: string) => new Date(date);
 
@@ -207,6 +213,14 @@ async function main() {
       });
     }
   }
+
+  const onWeekday = (d: Date) => {
+    const out = new Date(d);
+    while(out.getUTCDay() === 0 || out.getUTCDay() === 6) out.setUTCDate(out.getUTCDate() + 1);
+    return out;
+  }
+  await Holiday.create({ date: onWeekday(new Date(today.getTime() - 40 * 86400000)), name: "Founders Day", createdBy: ceo._id });
+  await Holiday.create({ date: onWeekday(new Date(today.getTime() + 12 * 86400000)), name: "Winter Break", createdBy: ceo._id});
 
   // Mark yesterday as an unpaid absence for one employee so the payslip
   // and attendance views have something interesting to show immediately.

@@ -17,11 +17,12 @@ export async function getTeamSubTreeId(actorId: string): Promise<Types.ObjectId[
     await connectDB();
 
     const now = new Date();
-
+    
+     // Anyone currently acting as a manager pulls that manager's whole
+  // subtree in as their own for the duration of the window.
     const actingFor = await Employee.find({
         actingManagerId: new Types.ObjectId(actorId),
         actingManagerUnit: { $gte: now },
-
     }).select("_id ");
 
     const rootIds = [new Types.ObjectId(actorId), ...actingFor.map((e) => e._id)];
@@ -171,7 +172,10 @@ export async function resolveScope(
     );
 
     if(widest === "org" || widest === "system")
-        return {scope: "self", ids:[new Types.ObjectId(actorId)]}
+        return {scope: widest, ids: "all" };
+
+    if(widest === "self") 
+        return {scope: "self", ids: [new Types.ObjectId(actorId )]};
 
     const subtree = await getTeamSubTreeId(actorId);
     return {scope: "team", ids: subtree.filter((id) => id.toString() !== actorId) };
